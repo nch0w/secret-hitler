@@ -46,22 +46,6 @@ class Gamechat extends React.Component {
 	componentDidMount() {
 		this.scrollChats();
 		setTimeout(() => this.setState({ forceProcess: true }, () => this.scrollChats()), 750);
-
-		$(this.leaveGameModal).on('click', '.leave-game.button', () => {
-			// modal methods dont seem to work.
-			window.location.hash = '#/';
-			$(this.leaveGameModal).modal('hide');
-		});
-
-		$(this.leaveTournyQueueModal).on('click', '.leave-tourny.button', () => {
-			window.location.hash = '#/';
-			$(this.leaveTournyQueueModal).modal('hide');
-		});
-
-		$(this.leaveTournyQueueModal).on('click', '.leave-tourny-queue.button', () => {
-			window.location.hash = '#/';
-			$(this.leaveTournyQueueModal).modal('hide');
-		});
 		this.props.socket.on('removeClaim', () => {
 			this.setState({
 				claim: ''
@@ -156,9 +140,29 @@ class Gamechat extends React.Component {
 		const { userInfo, gameInfo } = this.props;
 
 		if (userInfo.isSeated && gameInfo.gameState.isStarted && !gameInfo.gameState.isCompleted) {
-			$(this.leaveGameModal).modal('show');
+			Swal.fire({
+				title: 'Leave Game',
+				text: 'Leaving an in progress game may result on a moderative action on your account. Do this only in case of the game no longer being active.',
+				showCancelButton: true,
+				confirmButtonText: 'Leave game',
+				icon: 'warning'
+			}).then(result => {
+				if (result.value) {
+					window.location.hash = '#/';
+				}
+			});
 		} else if (userInfo.isSeated && !gameInfo.gameState.isStarted && gameInfo.general.isTourny) {
-			$(this.leaveTournyQueueModal).modal('show');
+			Swal.fire({
+				title: 'Leaving?',
+				text: 'Leaving this table will leave the tournament queue',
+				showCancelButton: true,
+				confirmButtonText: 'Leave tournament queue',
+				icon: 'warning'
+			}).then(result => {
+				if (result.value) {
+					window.location.hash = '#/';
+				}
+			});
 		} else {
 			window.location.hash = '#/';
 		}
@@ -1487,30 +1491,6 @@ class Gamechat extends React.Component {
 						}
 					})()}
 				</form>
-				<div
-					className="ui basic fullscreen modal leavegamemodals"
-					ref={c => {
-						this.leaveGameModal = c;
-					}}
-				>
-					<h2 className="ui header">
-						DANGER. Leaving an in-progress game will ruin it for the other players (unless you've been executed). Do this only in the case of a game already
-						ruined by an AFK/disconnected player, if someone has already left, or if the game has been remade.
-					</h2>
-					<div className="ui green positive inverted leave-game button">
-						<i className="checkmark icon" />
-						Leave game
-					</div>
-				</div>
-				<div
-					className="ui basic fullscreen modal leavetournyqueue"
-					ref={c => {
-						this.leaveTournyQueueModal = c;
-					}}
-				>
-					<h2 className="ui header">Leaving this table will leave the tournament queue</h2>
-					<div className="ui red positive inverted leave-tourny-queue button">Leave tournament queue</div>
-				</div>
 				<div
 					className="ui basic fullscreen modal modendgamemodal"
 					ref={c => {
