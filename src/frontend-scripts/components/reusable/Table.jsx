@@ -30,7 +30,7 @@ const TBody = ({ rows }) => (
  * @return {jsx}
  */
 const Table = ({ headers, rows, uiTable }) => (
-	<table className={`ui ${uiTable} table`}>
+	<table className={`ui ${uiTable} table inverted`}>
 		<thead>
 			<tr>
 				{headers.map(h => (

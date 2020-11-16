@@ -146,7 +146,7 @@ class ProfileWrapper extends React.Component {
 						<i className="large help circle icon" />
 					</a>
 				</div>
-				<div className="ui top attached menu">
+				<div className="ui top attached menu inverted winrate-header">
 					<a className={`${toActive('MATCHES')} item`} onClick={updateActiveStats.bind(null, 'MATCHES')}>
 						Matches
 					</a>
@@ -160,7 +160,7 @@ class ProfileWrapper extends React.Component {
 						Misc
 					</a>
 				</div>
-				<div className="ui bottom attached segment">{table}</div>
+				<div className="ui bottom attached segment winrate-container">{table}</div>
 			</div>
 		);
 	}
